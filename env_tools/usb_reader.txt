@@ -1,0 +1,9 @@
+### run script when usb is inserted
+
+nano /etc/udev/rules.d/99-my-usb-rule.rules
+## Add this line
+ACTION=="add", KERNEL=="sd*1", SUBSYSTEMS=="usb", RUN+="/home/pi/dev/Loadout-Ticket-Automation/utilities/usb.py %k"
+
+chmod +x utilities/usb.py 
+
+sudo udevadm control --reload-rules
