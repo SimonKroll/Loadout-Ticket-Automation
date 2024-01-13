@@ -1,10 +1,12 @@
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
-from datetime import datetime
+from datetime import datetime, date
 import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522
 import os
+from time import sleep 
+import sqlite3
 
 def generate_report(output_path, report_data):
     # Create a new PDF file
@@ -78,17 +80,50 @@ if __name__ == "__main__":
         'trailer_plate' : 'Trailer License Plate'
     }
 
+    #Set Buzzer
+    buzzer = 27
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(buzzer, GPIO.OUT) 
+
+    conn = sqlite3.connect('./db/LoadoutCreds.db')
+    cursor = conn.cursor()
+
     # Specify the output PDF file path
     output_path = 'output_report.pdf'
     print("reader is live...")
     reader = SimpleMFRC522()
 
     try:
-            id, text = reader.read()
-            print(id)
-            report_data['contract_number'] = str(id)
-            report_data['source_name'] = str(text)
-            print(text)
+        id, text = reader.read()
+        GPIO.output(buzzer,1)
+        sleep(0.125)
+        GPIO.output(buzzer,0)
+        sleep(0.125)
+        GPIO.output(buzzer,1)
+        sleep(0.125)                
+        GPIO.output(buzzer,0)
+
+        cursor.execute(f"SELECT * FROM credentials WHERE CardID= ?", id)
+        row = cursor.fetchone()
+        report_data = {
+        'source_name': row[1],
+        'source_address': row[2],
+        'source_address_2': row[3],
+        'source_phone': row[4],
+        'ticket_number': '00000',
+        'date' : date.today().strftime('%B %d, %Y'),
+        'commodity': row[5],
+        'contract_number' : row[6],
+        'load_number' : '00000',
+        'customer_name': row[7],
+        'customer_address': row[8],
+        'customer_address_2': row[9],
+        'customer_city_state': row[10],
+        'carrier_name' : row[11],
+        'truck_plate' : row[12],
+        'trailer_plate' : row[13]
+    }
+        print(text)
     finally:
             GPIO.cleanup()
 
