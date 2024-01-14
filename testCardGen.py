@@ -103,7 +103,8 @@ if __name__ == "__main__":
         sleep(0.125)                
         GPIO.output(buzzer,0)
 
-        cursor.execute(f"SELECT * FROM credentials WHERE CardID= ?", id)
+
+        cursor.execute("SELECT * FROM credentials WHERE CardID=?", [int(id)]) 
         row = cursor.fetchone()
         report_data = {
         'source_name': row[1],
