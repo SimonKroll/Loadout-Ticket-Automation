@@ -1,25 +1,20 @@
 #!/usr/bin/python3
 
-import RPi.GPIO as GPIO
-from time import sleep 
 import os
 import logging    # first of all import the module
 import sys
 import sqlite3
 import csv
-from time import sleep
+import Buzzer
 
-buzzer = 27
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(buzzer, GPIO.OUT) 
+buzzer = Buzzer()
 
 logging.basicConfig(filename='/home/pi/dev/Loadout-Ticket-Automation/utilities/log.txt', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
 logging.warning(os.getcwd())
 try:
     if len(sys.argv) > 1:
-        GPIO.output(buzzer,1)
-        sleep(0.5)
-        GPIO.output(buzzer,0)
+        buzzer.beep()
+
         drive_name = sys.argv[1]
         logging.warning(f"USB drive {drive_name} inserted. Running Python script...")
 
@@ -77,19 +72,4 @@ except Exception as e:
     logging.error(e)
 
 
-
-
-
-GPIO.output(buzzer,1)
-sleep(0.125)
-GPIO.output(buzzer,0)
-sleep(0.125)
-GPIO.output(buzzer,1)
-sleep(0.125)
-GPIO.output(buzzer,0)
-sleep(0.125)
-GPIO.output(buzzer,1)
-sleep(0.125)
-GPIO.output(buzzer,0)
-
-GPIO.cleanup()
+buzzer.beep(repetitions = 3, duration = 0.2, pause = 0.1)

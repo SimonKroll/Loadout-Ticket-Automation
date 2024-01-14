@@ -1,12 +1,12 @@
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
-from datetime import datetime, date
-import RPi.GPIO as GPIO
+
+from datetime import datetime
 from mfrc522 import SimpleMFRC522
 import os
-from time import sleep 
 import sqlite3
+from utilities import Buzzer
 
 def generate_report(output_path, report_data):
     # Create a new PDF file
@@ -60,7 +60,6 @@ def generate_report(output_path, report_data):
 
 if __name__ == "__main__":
     # Example data
-    current_date = datetime.now().strftime("%Y-%m-%d")
     report_data = {
         'source_name': 'Source Name',
         'source_address': 'Source Address',
@@ -81,9 +80,7 @@ if __name__ == "__main__":
     }
 
     #Set Buzzer
-    buzzer = 27
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(buzzer, GPIO.OUT) 
+    buzzer = Buzzer()
 
     conn = sqlite3.connect('./db/LoadoutCreds.db')
     cursor = conn.cursor()
@@ -95,14 +92,8 @@ if __name__ == "__main__":
 
     try:
         id, text = reader.read()
-        GPIO.output(buzzer,1)
-        sleep(0.125)
-        GPIO.output(buzzer,0)
-        sleep(0.125)
-        GPIO.output(buzzer,1)
-        sleep(0.125)                
-        GPIO.output(buzzer,0)
-
+        
+        buzzer.beep()
 
         cursor.execute("SELECT * FROM credentials WHERE CardID=?", [int(id)]) 
         row = cursor.fetchone()
@@ -112,7 +103,7 @@ if __name__ == "__main__":
         'source_address_2': row[3],
         'source_phone': row[4],
         'ticket_number': '00000',
-        'date' : date.today().strftime('%B %d, %Y'),
+        'date' : datetime.now().strftime('%B %d, %Y'),
         'commodity': row[5],
         'contract_number' : row[6],
         'load_number' : '00000',
@@ -123,10 +114,10 @@ if __name__ == "__main__":
         'carrier_name' : row[11],
         'truck_plate' : row[12],
         'trailer_plate' : row[13]
-    }
-        print(text)
+        }
+
     finally:
-            GPIO.cleanup()
+        pass
 
     # Generate the report
     generate_report(output_path, report_data)
