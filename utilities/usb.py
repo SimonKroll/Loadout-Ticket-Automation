@@ -5,7 +5,8 @@ import logging    # first of all import the module
 import sys
 import sqlite3
 import csv
-import Buzzer
+from Buzzer import Buzzer
+import encoder
 
 buzzer = Buzzer()
 
@@ -49,7 +50,7 @@ try:
                 for row in csv_reader:
                     cursor.execute(f'''
                         INSERT OR REPLACE INTO credentials 
-                        VALUES  ({values})''', row)
+                        VALUES  ({values})''', [encoder.id_decode(row[0])] + row[1:])
             # Commit the changes and close the connection
             conn.commit()
             conn.close()
@@ -59,9 +60,14 @@ try:
             with open(mount_path+"card_data.csv", "w") as csv_file:
                 csv_writer = csv.writer(csv_file, delimiter=",")
                 csv_writer.writerow([i[0] for i in cursor.description]) #prints the titles in the top row
-                csv_writer.writerows(cursor)
+                #csv_writer.writerows(cursor)
+                for row in cursor:
+                    card_id = encoder.id_encode(row[0])
+                    row = (card_id,) + row[1:]
 
-            dirpath = mount_path + "/card_data.csv"
+                    csv_writer.writerow(row)
+
+            dirpath = mount_path + "card_data.csv"
             logging.warning("Data exported Successfully into {}".format(dirpath))
 
 
