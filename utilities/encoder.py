@@ -1,7 +1,7 @@
 # encoder
 
 def id_encode(number: str) -> str:
-
+    number = str(number)
     encoded_string = ""
     if number.isdigit():
         while number:
