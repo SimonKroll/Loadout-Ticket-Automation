@@ -3,6 +3,25 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from datetime import datetime
 
+report_data = {
+        'source_name': 'Source Name',
+        'source_address': 'Source Address',
+        'source_address_2': 'Source Address 2',
+        'source_phone': 'Source Phone',
+        'ticket_number': '00000',
+        'date' : '01-01-2014',
+        'commodity':'Soybean Meal',
+        'contract_number' : '00000',
+        'load_number' : '00000',
+        'customer_name': 'Customer Name',
+        'customer_address': 'Customer Address',
+        'customer_address_2': 'Customer Address 2',
+        'customer_city_state': 'City State Zip',
+        'carrier_name' : 'Carrier Name',
+        'truck_plate' : 'Truck License Plate',
+        'trailer_plate' : 'Trailer License Plate'
+    }
+
 def generate_report(output_path, report_data):
     # Create a new PDF file
     with open(output_path, 'wb') as output_file:
@@ -56,25 +75,7 @@ def generate_report(output_path, report_data):
 if __name__ == "__main__":
     # Example data
     current_date = datetime.now().strftime("%Y-%m-%d")
-    report_data = {
-        'source_name': 'Source Name',
-        'source_address': 'Source Address',
-        'source_address_2': 'Source Address 2',
-        'source_phone': 'Source Phone',
-        'ticket_number': '00000',
-        'date' : '01-01-2014',
-        'commodity':'Soybean Meal',
-        'contract_number' : '00000',
-        'load_number' : '00000',
-        'customer_name': 'Customer Name',
-        'customer_address': 'Customer Address',
-        'customer_address_2': 'Customer Address 2',
-        'customer_city_state': 'City State Zip',
-        'carrier_name' : 'Carrier Name',
-        'truck_plate' : 'Truck License Plate',
-        'trailer_plate' : 'Trailer License Plate'
-    }
-
+    
     # Specify the output PDF file path
     output_path = 'output_report.pdf'
 
