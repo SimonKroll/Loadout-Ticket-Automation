@@ -4,6 +4,7 @@ from utilities import Buzzer
 
 import os
 import sqlite3
+import csv
 from datetime import datetime
 from mfrc522 import SimpleMFRC522
 #from RFID import read
@@ -11,7 +12,8 @@ from mfrc522 import SimpleMFRC522
 
 # System Parameters
 db_path = "./loadout(TESTING).db"
-report_path = "./output_files/"
+report_path = "./output_files/reports/"
+ticket_log = "./output_files/log/load_history.csv"
 
 
 # On START
@@ -19,6 +21,12 @@ initalizeDB.initalize(db_path)
 
 conn = sqlite3.connect(database=db_path)
 cursor = conn.cursor()
+
+if not os.path.isfile(ticket_log):
+    cursor.execute("select * from credentials")
+    with open(ticket_log, "w") as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=",")
+        csv_writer.writerow(["Timestamp", "Ticket #", "Contract Load #"]+[i[0] for i in cursor.description]) #prints the titles in the top row
 
 report_data = genPDF.report_data
 
@@ -72,6 +80,11 @@ while True:
         'truck_plate' : row[12],
         'trailer_plate' : row[13]
         }
+
+        # Log the report
+        with open(ticket_log, "a") as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=",")
+            csv_writer.writerow([datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'), ticket_number, contract_load_number]+[ i for i in row]) #prints the titles in the top row
 
     finally:
         pass

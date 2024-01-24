@@ -24,16 +24,19 @@ try:
         mount_path = "/home/pi/dev/Loadout-Ticket-Automation/usbmount/"
         project_path = "/home/pi/dev/Loadout-Ticket-Automation/"
 
+        #db_file = project_path+'db/LoadoutCreds.db'
+        db_file = project_path+'loadout(TESTING).db'
+        load_hist_file = project_path+ "output_files/log/load_history.csv"
+
         # mount the drive
         os.system(f"mount {drive_path} {mount_path}")
 
-        # For Testing
-        f = open(mount_path+"instructions.txt", "a")
-        f.write("Now the file has more content! yayaya\n")
-        f.close()
+        # Upload History log
+        if os.path.isfile(load_hist_file):
+            os.system(f" cp {load_hist_file} {mount_path}")
 
         #TODO: check for file and read it into DB
-        conn = sqlite3.connect(project_path+'db/LoadoutCreds.db')
+        conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
         logging.error("is File?  {}".format(os.path.isfile(mount_path+"card_data.csv")))
         if os.path.isfile(mount_path+"card_data.csv"):
@@ -64,7 +67,6 @@ try:
                 for row in cursor:
                     card_id = encoder.id_encode(row[0])
                     row = (card_id,) + row[1:]
-
                     csv_writer.writerow(row)
 
             dirpath = mount_path + "card_data.csv"
