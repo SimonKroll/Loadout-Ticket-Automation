@@ -9,6 +9,9 @@ __pycache__/
 # database files
 *.db
 
+# system output
+output_files/*
+
 
 # C extensions
 *.so
