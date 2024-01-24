@@ -60,7 +60,7 @@ while True:
         'source_address_2': row[3],
         'source_phone': row[4],
         'ticket_number': ticket_number,
-        'date' : datetime.now().strftime('%B %d, %Y'),
+        'date' : datetime.now().strftime('%B %d, %Y %I:%M %p'),
         'commodity': row[5],
         'contract_number' : row[6],
         'load_number' : contract_load_number,
