@@ -9,11 +9,13 @@ from datetime import datetime
 from mfrc522 import SimpleMFRC522
 #from RFID import read
 
+# Get the absolute path of the script's directory
+proj_dir = os.path.dirname(os.path.abspath(__file__))
 
-# System Parameters
-db_path = "./loadout(TESTING).db"
-report_path = "./output_files/reports/"
-ticket_log = "./output_files/log/load_history.csv"
+### System Parameters
+db_path = os.path.join(proj_dir,"loadout(TESTING).db")
+report_path = os.path.join(proj_dir,"output_files/reports/")
+ticket_log = os.path.join(proj_dir,"output_files/log/load_history.csv")
 
 
 # On START
@@ -81,19 +83,27 @@ while True:
         'trailer_plate' : row[13]
         }
 
+        # Generate the report
+        output_file = report_path + f"Report_{datetime.now().strftime('%Y%m%d')}_{ticket_number}.pdf"
+        genPDF.generate_report(output_file, report_data)
+
+        # Print the report
+        os.system(f"lp -d HP_Officejet_Pro_8600 {output_file}")
+
         # Log the report
         with open(ticket_log, "a") as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=",")
             csv_writer.writerow([datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'), ticket_number, contract_load_number]+[ i for i in row]) #prints the titles in the top row
 
+    except Exception as e:
+        pass
+    else:
+        pass
     finally:
         pass
 
-    # Generate the report
-    output_file = report_path + f"Report_{datetime.now().strftime('%Y%m%d')}_{ticket_number}.pdf"
-    genPDF.generate_report(output_file, report_data)
 
-    # Print the report
-    print(f"Report generated and saved to {output_file}")
-    os.system(f"lp -d HP_Officejet_Pro_8600 {output_file}")
+
+    
+
 
