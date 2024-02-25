@@ -13,7 +13,7 @@ from mfrc522 import SimpleMFRC522
 proj_dir = os.path.dirname(os.path.abspath(__file__))
 
 ### System Parameters
-db_path = os.path.join(proj_dir,"loadout(TESTING).db")
+db_path = os.path.join(proj_dir,"loadout(TESTING).db")  #TODO: change to live DB
 report_path = os.path.join(proj_dir,"output_files/reports/")
 ticket_log = os.path.join(proj_dir,"output_files/log/load_history.csv")
 
@@ -38,7 +38,7 @@ reader = SimpleMFRC522()
 # RUN
 while True:
     try:
-        id, text = reader.read()
+        id, text = reader.read_no_block()
         buzzer.beep()
 
 
