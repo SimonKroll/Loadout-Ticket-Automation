@@ -16,7 +16,7 @@ proj_dir = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(proj_dir,"loadout(TESTING).db")  #TODO: change to live DB
 report_path = os.path.join(proj_dir,"output_files/reports/")
 ticket_log = os.path.join(proj_dir,"output_files/log/load_history.csv")
-
+# TODO: add error log path and logging functionality
 
 # On START
 initalizeDB.initalize(db_path)
@@ -92,9 +92,10 @@ while True:
                 # Print the report
                 os.system(f"lp -d HP_Officejet_Pro_8600 {output_file}")
 
+                # TODO: create history logging function separately, consider using openpyxl?
                 # Log the report
-                with open(ticket_log, "a") as csv_file:
-                    csv_writer = csv.writer(csv_file, delimiter=",")
+                with open(ticket_log, "a") as csv_file: 
+                    csv_writer = csv.writer(csv_file, delimiter=",") # NOTE: use DictWriter for header support and better row definition 
                     csv_writer.writerow([datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'), ticket_number, contract_load_number]+[ i for i in row]) #prints the titles in the top row
             else: # Card is not on file, log the error 
                 pass

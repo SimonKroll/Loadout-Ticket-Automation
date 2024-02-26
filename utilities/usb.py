@@ -58,6 +58,7 @@ try:
             conn.commit()
             conn.close()
             logging.warning(f"Data written to the DB")
+            #TODO: When new data is added to DB, create new contract instance
         else:
             cursor.execute("select * from credentials")
             with open(mount_path+"card_data.csv", "w") as csv_file:
