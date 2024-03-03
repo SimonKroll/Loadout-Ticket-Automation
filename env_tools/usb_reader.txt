@@ -7,3 +7,10 @@ ACTION=="add", KERNEL=="sd*1", SUBSYSTEMS=="usb", RUN+="/home/pi/dev/Loadout-Tic
 chmod +x utilities/usb.py 
 
 sudo udevadm control --reload-rules
+
+
+### Service start up 
+cp loadout.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable loadout.service
+sudo systemctl start loadout.service
