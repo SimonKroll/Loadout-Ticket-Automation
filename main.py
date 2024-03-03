@@ -7,6 +7,7 @@ import sqlite3
 import csv
 from datetime import datetime
 from mfrc522 import SimpleMFRC522
+import time
 #from RFID import read
 
 # Get the absolute path of the script's directory
@@ -34,6 +35,10 @@ report_data = genPDF.report_data
 
 buzzer = Buzzer()
 reader = SimpleMFRC522()
+
+#Startup Sound
+buzzer.beep(duration=1, pause=0.2)
+buzzer.beep(repetitions=3, duration=0.2, pause=0.1)
 
 # RUN
 while True:
