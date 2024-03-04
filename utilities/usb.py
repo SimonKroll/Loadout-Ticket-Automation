@@ -26,7 +26,7 @@ try:
         project_path = "/home/pi/dev/Loadout-Ticket-Automation/"
 
         #db_file = project_path+'db/LoadoutCreds.db'
-        db_file = project_path+'loadout(TESTING).db'
+        db_file = project_path+'db/production.db'
         load_hist_file = project_path+ "output_files/log/load_history.csv"
 
         # mount the drive
