@@ -14,7 +14,7 @@ import time
 proj_dir = os.path.dirname(os.path.abspath(__file__))
 
 ### System Parameters
-db_path = os.path.join(proj_dir,"db/production.db")  #TODO: change to live DB
+db_path = os.path.join(proj_dir,"db/production.db")
 report_path = os.path.join(proj_dir,"output_files/reports/")
 ticket_log = os.path.join(proj_dir,"output_files/log/load_history.csv")
 # TODO: add error log path and logging functionality
