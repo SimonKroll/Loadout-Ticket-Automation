@@ -34,6 +34,7 @@ def generate_report(output_path, report_data):
             c.setFont("Helvetica-Bold", 11)
 
             c.drawCentredString(4.25*inch,720-offset, "OUTBOUND")
+            c.drawString(400, 675-offset, "Not An Official Scale Ticket")
 
             # Set font and size
             c.setFont("Helvetica", 11)
@@ -47,7 +48,7 @@ def generate_report(output_path, report_data):
             # Draw date and Ticket #
             c.drawString(400, 705-offset, f"Loadout Ticket # {report_data['ticket_number']}")
             c.drawString(400, 690-offset, f"Date: {report_data['date']}")
-            c.drawString(400, 675-offset, "Not An Official Scale Ticket")
+
 
 
             c.drawString(72, 630-offset, f"Commodity: {report_data['commodity']}")
@@ -65,9 +66,9 @@ def generate_report(output_path, report_data):
             c.drawString(72, 495-offset, f"Truck License Plate: {report_data['truck_plate']}")
             c.drawString(72, 480-offset, f"Trailer License Plate: {report_data['trailer_plate']}")
 
-        dashes = 30
-        for dash in range(dashes):
-            c.line(10+ dash*612/dashes,5.5*inch,dash*612/dashes +20, 5.5*inch)
+        #dashes = 30
+        #for dash in range(dashes):
+        #    c.line(10+ dash*612/dashes,5.5*inch,dash*612/dashes +20, 5.5*inch)
 
         # Save the canvas to the PDF file
         c.save()
