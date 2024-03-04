@@ -20,8 +20,9 @@ def _cleanup():
     GPIO.cleanup()
 
 # Run cleanup when the script ends or is interrupted
-import atexit
-atexit.register(_cleanup)
+#import atexit
+#atexit.register(_cleanup)
+# BUG: usb.py ends, which calls cleanup and disables buzzer
 
 if __name__ == "__main__":
     buzzer = Buzzer()
