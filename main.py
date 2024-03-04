@@ -35,17 +35,21 @@ report_data = genPDF.report_data
 
 buzzer = Buzzer()
 reader = SimpleMFRC522()
+last_scan_time = datetime.now()
 
 #Startup Sound
-buzzer.beep(duration=1, pause=0.2)
-buzzer.beep(repetitions=3, duration=0.2, pause=0.1)
+for _ in range(2):
+    buzzer.beep(repetitions=3, duration=0.1, pause=0.05)
+    buzzer.beep(duration=0.3, pause=0.05)
+    buzzer.beep(duration=0.2, pause=0.2)
 
 # RUN
 while True:
     try:
         id, text = reader.read_no_block()
         
-        if id:
+        if id and (datetime.now() - last_scan_time).total_seconds() > 2:
+            last_scan_time = datetime.now()
             buzzer.beep()
 
             cursor.execute("SELECT * FROM credentials WHERE CardID=?", [int(id)]) 
