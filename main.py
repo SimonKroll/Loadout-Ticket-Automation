@@ -57,21 +57,25 @@ while True:
 
             if row: # Ensures card is on file
                 # Update & Retrieve the Ticket Counter
-                cursor.execute("UPDATE counters SET value = value + 1 WHERE counter_name = 'loadID'") # TODO: Rename loadID to ticket
-                conn.commit() 
-                cursor.execute("SELECT value FROM counters WHERE counter_name = 'loadID';")
-                ticket_number = str(cursor.fetchone()[0]).zfill(5)
+                if (str(id) == "423312773588"): ## Sample ID for training, non-incrementing
+                    ticket_number = "00000"
+                    contract_load_number = "12345"
+                else:
+                    cursor.execute("UPDATE counters SET value = value + 1 WHERE counter_name = 'loadID'") # TODO: Rename loadID to ticket
+                    conn.commit() 
+                    cursor.execute("SELECT value FROM counters WHERE counter_name = 'loadID';")
+                    ticket_number = str(cursor.fetchone()[0]).zfill(5)
 
-                # Update & Retrieve the Contract Load Counter
-                # TODO: initialize contract counters on startup
-                cursor.execute('''INSERT OR IGNORE INTO counters
-                                VALUES (?, 0)''', [row[6]])
-                conn.commit() 
+                    # Update & Retrieve the Contract Load Counter
+                    # TODO: initialize contract counters on startup
+                    cursor.execute('''INSERT OR IGNORE INTO counters
+                                    VALUES (?, 0)''', [row[6]])
+                    conn.commit() 
 
-                cursor.execute("UPDATE counters SET value = value + 1 WHERE counter_name = ?", [row[6]])
-                conn.commit() 
-                cursor.execute("SELECT value FROM counters WHERE counter_name = ?", [row[6]])
-                contract_load_number = str(cursor.fetchone()[0]).zfill(5)
+                    cursor.execute("UPDATE counters SET value = value + 1 WHERE counter_name = ?", [row[6]])
+                    conn.commit() 
+                    cursor.execute("SELECT value FROM counters WHERE counter_name = ?", [row[6]])
+                    contract_load_number = str(cursor.fetchone()[0]).zfill(5)
 
 
                 # Fill Report Data
