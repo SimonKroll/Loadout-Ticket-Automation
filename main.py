@@ -48,7 +48,7 @@ while True:
     try:
         id, text = reader.read_no_block()
         
-        if id and (datetime.now() - last_scan_time).total_seconds() > 2:
+        if id and (datetime.now() - last_scan_time).total_seconds() > 15:
             last_scan_time = datetime.now()
             buzzer.beep()
 
