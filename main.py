@@ -106,10 +106,16 @@ while True:
                 os.system(f"lp -d HP_Officejet_Pro_8600 {output_file}")
 
                 # TODO: create history logging function separately, consider using openpyxl?
-                # Log the report
+                ### Log the report
+                # log sql table
+                logging_timestamp = datetime.now()
+                cursor.execute(" INSERT INTO load_history VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (None, ticket_number, contract_load_number, *row ))
+                conn.commit()
+                # log to csv file
                 with open(ticket_log, "a") as csv_file: 
                     csv_writer = csv.writer(csv_file, delimiter=",") # NOTE: use DictWriter for header support and better row definition 
-                    csv_writer.writerow([datetime.now().strftime('%m/%d/%Y %I:%M:%S %p'), ticket_number, contract_load_number]+[ i for i in row]) #prints the titles in the top row
+                    csv_writer.writerow([logging_timestamp.strftime('%m/%d/%Y %I:%M:%S %p'), ticket_number, contract_load_number]+[ i for i in row]) #prints the titles in the top row
             else: # Card is not on file, log the error 
                 pass
 
