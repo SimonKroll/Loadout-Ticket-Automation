@@ -113,7 +113,7 @@ while True:
                 logging_timestamp = datetime.now()
                 try:
                     cursor.execute(" INSERT INTO load_history VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (None, logging_timestamp, ticket_number, contract_load_number, *row ))
+                    (None, logging_timestamp.strftime('%Y-%m-%dT%H:%M:%S'), ticket_number, contract_load_number, *row ))
                     conn.commit()
                 except Exception as e:
                     conn.rollback()
