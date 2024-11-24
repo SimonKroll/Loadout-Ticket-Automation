@@ -10,6 +10,8 @@ from mfrc522 import SimpleMFRC522
 import time
 #from RFID import read
 
+print("Starting the LOT Service... from file", flush=True)
+
 # Get the absolute path of the script's directory
 proj_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -109,9 +111,13 @@ while True:
                 ### Log the report
                 # log sql table
                 logging_timestamp = datetime.now()
-                cursor.execute(" INSERT INTO load_history VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (None, ticket_number, contract_load_number, *row ))
-                conn.commit()
+                try:
+                    cursor.execute(" INSERT INTO load_history VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (None, logging_timestamp, ticket_number, contract_load_number, *row ))
+                    conn.commit()
+                except Exception as e:
+                    conn.rollback()
+                    print(f"DB LOGGING event error: {e} {len(row)}", flush=True)
                 # log to csv file
                 with open(ticket_log, "a") as csv_file: 
                     csv_writer = csv.writer(csv_file, delimiter=",") # NOTE: use DictWriter for header support and better row definition 
@@ -120,14 +126,11 @@ while True:
                 pass
 
     except Exception as e:
+        print(f"MAIN LOOP EXCEPTION: {e}", flush = True)
         pass
     else:
         pass
     finally:
         pass
-
-
-
-    
 
 
