@@ -1,6 +1,7 @@
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
+from reportlab.lib import utils
 from datetime import datetime
 
 report_data = {
@@ -19,8 +20,29 @@ report_data = {
         'customer_city_state': 'City State Zip',
         'carrier_name' : 'Carrier Name',
         'truck_plate' : 'Truck License Plate',
-        'trailer_plate' : 'Trailer License Plate'
+        'trailer_plate' : 'Trailer License Plate',
+        'notes': "Please send ticket recipt to Adam Kroll at (320)339-3171. Thank you!"
     }
+
+def add_notes(c, x, y, notes_text):
+    # Define the notes content, font size, and width for wrapping
+    font_name = "Courier"  
+    font_size = 9
+    wrap_width = 105  # Character count limit for a single line
+
+    # Split text into lines based on wrap width
+    lines = utils.simpleSplit(notes_text, font_name, font_size, wrap_width * font_size / 2)
+
+    # Set the font
+    c.setFont(font_name, font_size)
+
+    # Draw each line
+    line_spacing = 12  # Line height
+    for i, line in enumerate(lines):
+        c.drawString(x, y - (i * line_spacing), line)
+    
+    text_height = len(lines)*line_spacing
+    return text_height
 
 def generate_report(output_path, report_data):
     # Create a new PDF file
@@ -65,6 +87,13 @@ def generate_report(output_path, report_data):
             c.drawString(72, 510-offset, f"Carrier: {report_data['carrier_name']}")
             c.drawString(72, 495-offset, f"Truck License Plate: {report_data['truck_plate']}")
             c.drawString(72, 480-offset, f"Trailer License Plate: {report_data['trailer_plate']}")
+
+            if report_data['notes']:
+                c.drawString(60, 460-offset, f"Notes:")
+                note_height = add_notes(c, 72, 440-offset, report_data['notes'])
+                c.rect(60, 455-offset, 498,-note_height-12)
+
+            
 
         #dashes = 30
         #for dash in range(dashes):

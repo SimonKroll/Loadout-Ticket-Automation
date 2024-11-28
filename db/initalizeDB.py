@@ -21,7 +21,8 @@ def initalize(db_path : str):
     CustomerCityState varchar(127),
     CarrierName varchar(127),
     TruckPlate varchar(127),
-    TrailerPlate varchar(127)
+    TrailerPlate varchar(127),
+    Notes TEXT
     )''')
 
     cur.execute('''CREATE TABLE IF NOT EXISTS "counters"(

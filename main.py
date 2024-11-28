@@ -97,7 +97,8 @@ while True:
                 'customer_city_state': "", #row[10], # TODO: Determine if this is needed
                 'carrier_name' : row[11],
                 'truck_plate' : row[12],
-                'trailer_plate' : row[13]
+                'trailer_plate' : row[13],
+                'notes' : "" if len(row) < 15 else row[14]
                 }
 
                 # Generate the report
@@ -112,7 +113,7 @@ while True:
                 # log sql table
                 logging_timestamp = datetime.now()
                 try:
-                    cursor.execute(" INSERT INTO load_history VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    cursor.execute(f" INSERT INTO load_history VALUES ({",".join(["?" for _ in range(len(row) + 4)])})",
                     (None, logging_timestamp.strftime('%Y-%m-%dT%H:%M:%S'), ticket_number, contract_load_number, *row ))
                     conn.commit()
                 except Exception as e:
